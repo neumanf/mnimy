@@ -3,7 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { SignUpCredentialsDto } from './dto/signup-credentials.dto';
+import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 import { JwtPayload } from './jwt-payload.interface';
 import { UsersRepository } from '../users/users.repository';
 
@@ -15,12 +16,12 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
-    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-        return this.usersRepository.createUser(authCredentialsDto);
+    async signUp(signUpCredentialsDto: SignUpCredentialsDto): Promise<void> {
+        return this.usersRepository.createUser(signUpCredentialsDto);
     }
 
-    async signIn(authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
-        const { username, password } = authCredentialsDto;
+    async signIn(signInCredentialsDto: SignInCredentialsDto): Promise<{ accessToken: string }> {
+        const { username, password } = signInCredentialsDto;
         const user = await this.usersRepository.findOne({ username });
 
         if (user && (await bcrypt.compare(password, user.password))) {
