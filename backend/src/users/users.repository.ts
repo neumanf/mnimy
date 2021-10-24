@@ -19,7 +19,7 @@ export class UsersRepository extends Repository<User> {
             await this.save(user);
         } catch (error) {
             if (error.code === '23505') {
-                throw new ConflictException('Username or email already exists');
+                throw new ConflictException('username or email already exists');
             } else {
                 throw new InternalServerErrorException();
             }

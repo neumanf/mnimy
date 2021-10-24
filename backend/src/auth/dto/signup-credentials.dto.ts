@@ -13,7 +13,7 @@ export class SignUpCredentialsDto {
     @MinLength(8)
     @MaxLength(32)
     @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'Password is too weak',
+        message: 'password is too weak',
     })
     password: string;
 }
