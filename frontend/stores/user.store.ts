@@ -8,6 +8,12 @@ class UserStore {
     constructor(private readonly authService: AuthService) {}
 
     @action
+    isLoggedIn() {
+        const token = this.authService.accessToken;
+        return token ? true : false;
+    }
+
+    @action
     async signin(username: string, password: string) {
         this.username = await this.authService.signin(username, password);
     }
