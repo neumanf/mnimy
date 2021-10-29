@@ -2,7 +2,7 @@ import { Flex, Text, Divider } from "@chakra-ui/layout";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-import userStore from "../stores/user.store";
+import userStore from "../../stores/user.store";
 
 const Navbar = () => {
     const [isLoggedIn, setLogin] = useState(false);

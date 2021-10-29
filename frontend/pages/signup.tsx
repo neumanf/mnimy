@@ -4,6 +4,7 @@ import Router from "next/router";
 import React, { useEffect, useState } from "react";
 
 import userStore from "../stores/user.store";
+import Layout from "../components/Layouts/home";
 
 const SignUp = () => {
     const [username, setUsername] = useState("");
@@ -48,7 +49,7 @@ const SignUp = () => {
     };
 
     return (
-        <div className="fullscreen-wrapper">
+        <Layout>
             <div>
                 {errorMessage && (
                     <Box
@@ -117,7 +118,7 @@ const SignUp = () => {
                     </Link>
                 </Text>
             </div>
-        </div>
+        </Layout>
     );
 };
 
