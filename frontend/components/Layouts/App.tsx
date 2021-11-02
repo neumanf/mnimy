@@ -1,13 +1,12 @@
-import { Container } from "@chakra-ui/layout";
 import { NextPage } from "next";
 import React from "react";
-import Navbar from "../Common/Navbar";
+
+import Sidebar from "../Common/Sidebar/Sidebar";
 
 const Layout: NextPage = ({ children }) => {
     return (
         <>
-            <Navbar />
-            <Container p="6">{children}</Container>
+            <Sidebar>{children}</Sidebar>
         </>
     );
 };
