@@ -1,11 +1,10 @@
 import { Box, Button, Input, Text, Link } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import Router from "next/router";
-
 import React, { useEffect, useState } from "react";
 
 import userStore from "../stores/user.store";
-import Layout from "../components/Layouts/home";
+import Layout from "../components/Layouts/Home";
+import authorize from "../utils/authorize";
 
 const SignIn = () => {
     const [username, setUsername] = useState("");
@@ -16,11 +15,7 @@ const SignIn = () => {
     const router = useRouter();
 
     useEffect(() => {
-        const isLoggedIn = userStore.isLoggedIn();
-
-        if (isLoggedIn) {
-            Router.push("/app");
-        }
+        authorize();
     }, []);
 
     const submit = async (e: any) => {
@@ -29,7 +24,7 @@ const SignIn = () => {
         try {
             setLoading(true);
             await userStore.signin(username, password);
-            router.push("/app");
+            await router.push("/app");
         } catch (error: any) {
             const newErrorMessage: string | string[] =
                 error?.response?.data?.message;
