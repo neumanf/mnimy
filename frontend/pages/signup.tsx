@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import userStore from "../stores/user.store";
 import Layout from "../components/Layouts/Home";
-import authorize from "../utils/authorize";
+import { redirectIfLoggedIn } from "../utils/authorize";
 
 const SignUp = () => {
     const [username, setUsername] = useState("");
@@ -17,7 +17,7 @@ const SignUp = () => {
     const router = useRouter();
 
     useEffect(() => {
-        authorize();
+        redirectIfLoggedIn();
     }, []);
 
     const submit = async (e: any) => {
