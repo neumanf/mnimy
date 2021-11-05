@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from './auth/auth.module';
 import { configValidationSchema } from './config/config.schema';
+import { MemoriesModule } from './memories/memories.module';
 
 @Module({
     imports: [
@@ -24,7 +25,7 @@ import { configValidationSchema } from './config/config.schema';
                     },
                     type: 'postgres',
                     autoLoadEntities: true,
-                    synchronize: isProduction ? false : true,
+                    synchronize: !isProduction,
                     host: configService.get('DB_HOST'),
                     port: configService.get('DB_PORT'),
                     username: configService.get('DB_USERNAME'),
@@ -34,6 +35,7 @@ import { configValidationSchema } from './config/config.schema';
             },
         }),
         AuthModule,
+        MemoriesModule,
     ],
     controllers: [],
     providers: [],

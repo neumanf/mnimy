@@ -1,26 +1,27 @@
-import { Memory } from '../memories/memory.entity';
+import { Length } from 'class-validator';
 import {
     Column,
     CreateDateColumn,
     Entity,
-    OneToMany,
+    ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
 
+import { User } from 'src/users/user.entity';
+
 @Entity()
-export class User {
+export class Memory {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ unique: true })
-    username: string;
-
-    @Column({ unique: true })
-    email: string;
+    @Column()
+    @Length(3, 30)
+    title: string;
 
     @Column()
-    password: string;
+    @Length(3, 10000)
+    content: string;
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
     created_at: Date;
@@ -32,6 +33,6 @@ export class User {
     })
     updated_at: Date;
 
-    @OneToMany(() => Memory, (memory) => memory.user)
-    memories: Memory[];
+    @ManyToOne(() => User, (user) => user.memories)
+    user: User;
 }
