@@ -8,9 +8,8 @@ class UserStore {
     constructor(private readonly authService: AuthService) {}
 
     @action
-    isLoggedIn() {
-        const token = this.authService.accessToken;
-        return token ? true : false;
+    getAccessToken() {
+        return this.authService.accessToken;
     }
 
     @action

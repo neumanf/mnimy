@@ -8,7 +8,7 @@ const Navbar = () => {
     const [isLoggedIn, setLogin] = useState(false);
 
     useEffect(() => {
-        const isLoggedIn = userStore.isLoggedIn();
+        const isLoggedIn = userStore.getAccessToken();
 
         if (isLoggedIn) {
             setLogin(true);

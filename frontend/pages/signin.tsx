@@ -24,7 +24,7 @@ const SignIn = () => {
         try {
             setLoading(true);
             await userStore.signin(username, password);
-            await router.push("/app");
+            await router.push("/app/dashboard");
         } catch (error: any) {
             const newErrorMessage: string | string[] =
                 error?.response?.data?.message;

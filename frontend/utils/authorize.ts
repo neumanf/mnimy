@@ -2,19 +2,24 @@ import userStore from "../stores/user.store";
 import Router from "next/router";
 
 const authorize = async () => {
-    const isLoggedIn = userStore.isLoggedIn();
+    const hasToken = userStore.getAccessToken();
 
-    if (!isLoggedIn) {
+    if (!hasToken) {
         await Router.push("/signin");
     }
 };
 
 const redirectIfLoggedIn = async () => {
-    const isLoggedIn = userStore.isLoggedIn();
+    const hasToken = userStore.getAccessToken();
 
-    if (isLoggedIn) {
+    if (hasToken) {
         await Router.push("/app/dashboard");
     }
 };
 
-export { authorize, redirectIfLoggedIn };
+const signOut = async () => {
+    userStore.signout();
+    await Router.push("/signin");
+};
+
+export { authorize, redirectIfLoggedIn, signOut };
