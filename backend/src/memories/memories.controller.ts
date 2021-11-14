@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
 import { Memory } from './memory.entity';
 import { MemoriesService } from './memories.service';
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('memories')
@@ -17,9 +18,14 @@ export class MemoriesController {
     }
 
     @Get()
-    findAll(@Req() req: Request): Promise<Memory[]> {
-        const user: any = req.user;
-        return this.memoriesService.findAll(user.id);
+    index(@Query('page') page = 1, @Query('limit') limit = 5): Promise<Pagination<Memory>> {
+        limit = limit > 100 ? 100 : limit;
+
+        return this.memoriesService.paginate({
+            page,
+            limit,
+            route: 'http://localhost:3001/memories',
+        });
     }
 
     @Get(':id')

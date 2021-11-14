@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
+import { paginate, Pagination, IPaginationOptions } from 'nestjs-typeorm-paginate';
 
 import { User } from '../users/user.entity';
 import { Memory } from './memory.entity';
@@ -20,8 +21,8 @@ export class MemoriesService {
         return createdMemory;
     }
 
-    findAll(userId: string): Promise<Memory[]> {
-        return this.memoriesRepository.findAll(userId);
+    async paginate(options: IPaginationOptions): Promise<Pagination<Memory>> {
+        return paginate<Memory>(this.memoriesRepository, options);
     }
 
     findOne(id: string): Promise<Memory> {

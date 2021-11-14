@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import {
     Box,
     Button,
@@ -16,17 +16,17 @@ import {
     InputGroup,
     InputLeftElement,
     useDisclosure,
-} from "@chakra-ui/react";
-import { FaInfoCircle, FaPlusCircle, FaSearch } from "react-icons/fa";
-import { useRouter } from "next/router";
-import { useState } from "react";
+} from '@chakra-ui/react';
+import { FaArrowLeft, FaArrowRight, FaInfoCircle, FaPlusCircle, FaSearch } from 'react-icons/fa';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
-import Layout from "../../../components/Layouts/App";
-import { authorize, signOut } from "../../../utils/authorize";
-import MemoryCard from "../../../components/App/MuscularMemory/MemoryCard";
-import InfoText from "../../../components/Common/InfoText";
-import AddMemoryModal from "../../../components/App/MuscularMemory/AddMemoryModal";
-import RequestHandler from "../../../handlers/request.handler";
+import Layout from '../../../components/Layouts/App';
+import { authorize, signOut } from '../../../utils/authorize';
+import MemoryCard from '../../../components/App/MuscularMemory/MemoryCard';
+import InfoText from '../../../components/Common/InfoText';
+import AddMemoryModal from '../../../components/App/MuscularMemory/AddMemoryModal';
+import RequestHandler from '../../../handlers/request.handler';
 
 interface IMemory {
     id: string;
@@ -36,25 +36,43 @@ interface IMemory {
     updated_at: string;
 }
 
+interface IPaginationLinks {
+    first: string;
+    last: string;
+    next: string;
+    previous: string;
+}
+
 const MuscularMemory = () => {
     const router = useRouter();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [memory, setMemory] = useState<IMemory | null>(null);
     const [memories, setMemories] = useState<IMemory[]>([]);
+    const [pagination, setPagination] = useState<IPaginationLinks | null>(null);
 
     const { slug } = router.query;
 
-    const getMemories = async () => {
-        const { status, res: memories } = await RequestHandler.make(
-            "/memories"
-        );
+    const getMemories = async (paginate?: 'left' | 'right') => {
+        const path =
+            paginate && pagination
+                ? paginate === 'left'
+                    ? pagination.previous
+                    : pagination.next
+                : '/memories';
+        const { status, res } = await RequestHandler.make(path);
 
         if (status === 401) {
             await signOut();
         }
 
-        setMemories(memories);
-        return memories;
+        for (const index in res.links) {
+            res.links[index] = res.links[index].replace('http://localhost:3001', '');
+        }
+
+        if (status === 200) {
+            setMemories(res.items);
+            setPagination(res.links);
+        }
     };
 
     useEffect(() => {
@@ -71,7 +89,7 @@ const MuscularMemory = () => {
         } else {
             if (slug?.[0]) {
                 setMemory(null);
-                router.push("/app/muscularmemory");
+                router.push('/app/muscularmemory');
             }
         }
     }, [memories, slug, router]);
@@ -80,11 +98,7 @@ const MuscularMemory = () => {
         <Layout>
             <Flex>
                 <Flex flexDirection="column" flex="7">
-                    <Flex
-                        justifyContent="space-between"
-                        alignItems="center"
-                        my="2"
-                    >
+                    <Flex justifyContent="space-between" alignItems="center" my="3">
                         {memory ? (
                             <Text fontWeight="bold" isTruncated>
                                 {memory.title}
@@ -99,7 +113,7 @@ const MuscularMemory = () => {
                                         bgColor="gray.300"
                                         textColor="white"
                                         _hover={{
-                                            bgColor: "gray.500",
+                                            bgColor: 'gray.500',
                                         }}
                                         mr="2"
                                     >
@@ -109,15 +123,11 @@ const MuscularMemory = () => {
                                 <PopoverContent>
                                     <PopoverArrow />
                                     <PopoverCloseButton />
-                                    <PopoverHeader>
-                                        Muscular Memory Trainer
-                                    </PopoverHeader>
+                                    <PopoverHeader>Muscular Memory Trainer</PopoverHeader>
                                     <PopoverBody>
-                                        Here you can train your muscular memory
-                                        by typing the subject you need to
-                                        remember multiple times. To make this
-                                        process more fun, try to be faster each
-                                        time!
+                                        Here you can train your muscular memory by typing the
+                                        subject you need to remember multiple times. To make this
+                                        process more fun, try to be faster each time!
                                     </PopoverBody>
                                 </PopoverContent>
                             </Popover>
@@ -126,7 +136,7 @@ const MuscularMemory = () => {
                                 bgColor="green.300"
                                 textColor="white"
                                 _hover={{
-                                    bgColor: "green.500",
+                                    bgColor: 'green.500',
                                 }}
                                 onClick={onOpen}
                             >
@@ -174,6 +184,31 @@ const MuscularMemory = () => {
                     ) : (
                         <InfoText text="No memories found. Create one by pressing the New button." />
                     )}
+                    <Flex mt={1} justifyContent="end">
+                        <Button
+                            bgColor="gray.300"
+                            textColor="white"
+                            mr={2}
+                            _hover={{
+                                bgColor: 'gray.500',
+                            }}
+                            disabled={pagination?.previous.length === 0}
+                            onClick={() => getMemories('left')}
+                        >
+                            <Icon as={FaArrowLeft} />
+                        </Button>
+                        <Button
+                            bgColor="gray.300"
+                            textColor="white"
+                            _hover={{
+                                bgColor: 'gray.500',
+                            }}
+                            disabled={pagination?.next.length === 0}
+                            onClick={() => getMemories('right')}
+                        >
+                            <Icon as={FaArrowRight} />
+                        </Button>
+                    </Flex>
                 </Flex>
             </Flex>
         </Layout>
