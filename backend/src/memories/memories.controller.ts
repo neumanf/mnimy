@@ -18,7 +18,15 @@ export class MemoriesController {
     }
 
     @Get()
-    index(@Query('page') page = 1, @Query('limit') limit = 5): Promise<Pagination<Memory>> {
+    async index(
+        @Query('page') page = 1,
+        @Query('limit') limit = 5,
+        @Query('search') search: string
+    ): Promise<Pagination<Memory>> {
+        if (search) {
+            return this.memoriesService.search(search);
+        }
+
         limit = limit > 100 ? 100 : limit;
 
         return this.memoriesService.paginate({

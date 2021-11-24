@@ -25,6 +25,11 @@ export class MemoriesService {
         return paginate<Memory>(this.memoriesRepository, options);
     }
 
+    async search(term: string): Promise<Pagination<Memory>> {
+        const memories = await this.memoriesRepository.search(term);
+        return new Pagination(memories, { itemCount: 0, itemsPerPage: 0, currentPage: 0 });
+    }
+
     findOne(id: string): Promise<Memory> {
         return this.memoriesRepository.findOne(id);
     }

@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import {EntityRepository, ILike, Repository} from 'typeorm';
 
 import { Memory } from './memory.entity';
 
@@ -10,5 +10,9 @@ export class MemoriesRepository extends Repository<Memory> {
 
     async deleteOne(id: string) {
         return this.delete(id);
+    }
+
+    async search(term: string) {
+        return this.find({ title: ILike(`%${term}%`) });
     }
 }
