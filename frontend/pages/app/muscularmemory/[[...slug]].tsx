@@ -49,8 +49,16 @@ const MuscularMemory = () => {
     const [memory, setMemory] = useState<IMemory | null>(null);
     const [memories, setMemories] = useState<IMemory[]>([]);
     const [pagination, setPagination] = useState<IPaginationLinks | null>(null);
+    const [search, setSearch] = useState<string>('');
 
     const { slug } = router.query;
+
+    const getPaths = (links: any) => {
+        for (const index in links) {
+            links[index] = links[index].replace('http://localhost:3001', '');
+        }
+        return links;
+    };
 
     const getMemories = async (paginate?: 'left' | 'right') => {
         const path =
@@ -65,13 +73,11 @@ const MuscularMemory = () => {
             await signOut();
         }
 
-        for (const index in res.links) {
-            res.links[index] = res.links[index].replace('http://localhost:3001', '');
-        }
+        const paths = getPaths(res.links);
 
         if (status === 200) {
             setMemories(res.items);
-            setPagination(res.links);
+            setPagination(paths);
         }
     };
 
@@ -93,6 +99,18 @@ const MuscularMemory = () => {
             }
         }
     }, [memories, slug, router]);
+
+    useEffect(() => {
+        (async () => {
+            const { status, res } = await RequestHandler.make(`/memories?search=${search}`);
+            const paths = getPaths(res.links);
+
+            if (status === 200) {
+                setMemories(res.items);
+                setPagination(paths);
+            }
+        })();
+    }, [search]);
 
     return (
         <Layout>
@@ -167,7 +185,10 @@ const MuscularMemory = () => {
                             <InputLeftElement pointerEvents="none">
                                 <Icon mr="1" mb="1" as={FaSearch} />
                             </InputLeftElement>
-                            <Input placeholder="Search" />
+                            <Input
+                                placeholder="Search"
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
                         </InputGroup>
                     </Flex>
                     {memories ? (
@@ -192,7 +213,7 @@ const MuscularMemory = () => {
                             _hover={{
                                 bgColor: 'gray.500',
                             }}
-                            disabled={pagination?.previous.length === 0}
+                            disabled={!pagination || pagination?.previous.length === 0}
                             onClick={() => getMemories('left')}
                         >
                             <Icon as={FaArrowLeft} />
@@ -203,7 +224,7 @@ const MuscularMemory = () => {
                             _hover={{
                                 bgColor: 'gray.500',
                             }}
-                            disabled={pagination?.next.length === 0}
+                            disabled={!pagination || pagination?.next.length === 0}
                             onClick={() => getMemories('right')}
                         >
                             <Icon as={FaArrowRight} />
