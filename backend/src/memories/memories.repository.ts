@@ -1,4 +1,4 @@
-import {EntityRepository, ILike, Repository} from 'typeorm';
+import { EntityRepository, ILike, Repository } from 'typeorm';
 
 import { Memory } from './memory.entity';
 
@@ -13,6 +13,9 @@ export class MemoriesRepository extends Repository<Memory> {
     }
 
     async search(term: string) {
-        return this.find({ title: ILike(`%${term}%`) });
+        const queryBuilder = this.createQueryBuilder('search');
+        queryBuilder.where('search.title LIKE :title', { title: `%${term}%` }).getMany();
+
+        return queryBuilder;
     }
 }

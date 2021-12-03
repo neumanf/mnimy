@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult } from 'typeorm';
+import { DeleteResult, ILike } from 'typeorm';
 import { paginate, Pagination, IPaginationOptions } from 'nestjs-typeorm-paginate';
 
 import { User } from '../users/user.entity';
@@ -25,9 +25,9 @@ export class MemoriesService {
         return paginate<Memory>(this.memoriesRepository, options);
     }
 
-    async search(term: string): Promise<Pagination<Memory>> {
-        const memories = await this.memoriesRepository.search(term);
-        return new Pagination(memories, { itemCount: 0, itemsPerPage: 0, currentPage: 0 });
+    async search(term: string, options: IPaginationOptions): Promise<Pagination<Memory>> {
+        const memoriesBuilder = await this.memoriesRepository.search(term);
+        return paginate(memoriesBuilder, options);
     }
 
     findOne(id: string): Promise<Memory> {

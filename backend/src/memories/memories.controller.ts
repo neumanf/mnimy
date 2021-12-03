@@ -23,17 +23,20 @@ export class MemoriesController {
         @Query('limit') limit = 5,
         @Query('search') search: string
     ): Promise<Pagination<Memory>> {
-        if (search) {
-            return this.memoriesService.search(search);
-        }
-
         limit = limit > 100 ? 100 : limit;
 
-        return this.memoriesService.paginate({
+        const options = {
             page,
             limit,
             route: 'http://localhost:3001/memories',
-        });
+        };
+
+        if (search) {
+            options.route = `http://localhost:3001/memories?search=${search}`;
+            return this.memoriesService.search(search, options);
+        }
+
+        return this.memoriesService.paginate(options);
     }
 
     @Get(':id')
