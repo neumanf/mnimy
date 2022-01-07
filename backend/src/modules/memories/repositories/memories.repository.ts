@@ -1,6 +1,6 @@
 import { EntityRepository, ILike, Repository } from 'typeorm';
 
-import { Memory } from './memory.entity';
+import { Memory } from '../entities/memory.entity';
 
 @EntityRepository(Memory)
 export class MemoriesRepository extends Repository<Memory> {

@@ -1,4 +1,4 @@
-import { Memory } from '../memories/memory.entity';
+import { Memory } from '../../memories/entities/memory.entity';
 import {
     Column,
     CreateDateColumn,
