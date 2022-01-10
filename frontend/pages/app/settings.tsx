@@ -1,13 +1,6 @@
-import { useEffect } from "react";
-
-import Layout from "../../components/Layouts/App";
-import { authorize } from "../../utils/authorize";
+import Layout from '../../components/Layouts/App';
 
 const Settings = () => {
-    useEffect(() => {
-        authorize();
-    }, []);
-
     return <Layout>Settings</Layout>;
 };
 

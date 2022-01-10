@@ -10,7 +10,7 @@ async function bootstrap() {
 
     // app.useGlobalFilters(new AllExceptionsFilter());
     app.useGlobalPipes(new ValidationPipe());
-    app.enableCors();
+    app.enableCors({ origin: process.env.FRONTEND_URL, credentials: true });
     app.use(
         session({
             name: 'SESSION_ID',
@@ -18,7 +18,7 @@ async function bootstrap() {
             resave: false,
             saveUninitialized: false,
             cookie: {
-                maxAge: 60 * 1000,
+                maxAge: 15 * 60 * 1000,
             },
         })
     );

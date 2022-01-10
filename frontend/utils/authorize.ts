@@ -1,25 +1,18 @@
-import userStore from "../stores/user.store";
-import Router from "next/router";
+import Router from 'next/router';
 
-const authorize = async () => {
-    const hasToken = userStore.getAccessToken();
-
-    if (!hasToken) {
-        await Router.push("/signin");
-    }
-};
+import userStore from '../stores/user.store';
 
 const redirectIfLoggedIn = async () => {
-    const hasToken = userStore.getAccessToken();
+    const userIsLoggedIn = userStore.isLoggedIn();
 
-    if (hasToken) {
-        await Router.push("/app/dashboard");
+    if (userIsLoggedIn) {
+        await Router.push('/app/dashboard');
     }
 };
 
 const signOut = async () => {
     userStore.signout();
-    await Router.push("/signin");
+    await Router.push('/signin');
 };
 
-export { authorize, redirectIfLoggedIn, signOut };
+export { redirectIfLoggedIn, signOut };
