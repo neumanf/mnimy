@@ -55,7 +55,7 @@ const MuscularMemory = () => {
 
     const getPaths = (links: any) => {
         for (const index in links) {
-            links[index] = links[index].replace('http://localhost:3001', '');
+            links[index] = links[index].replace(process.env.BACKEND_URL, '');
         }
         return links;
     };
@@ -69,8 +69,6 @@ const MuscularMemory = () => {
                     : pagination.next
                 : '/memories';
         const res: any = await request.get(path);
-
-        console.log(res);
 
         const paths = getPaths(res.data.links);
 
