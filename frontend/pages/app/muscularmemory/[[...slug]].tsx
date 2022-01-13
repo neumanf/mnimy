@@ -22,7 +22,6 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import Layout from '../../../components/Layouts/App';
-import { signOut } from '../../../utils/authorize';
 import MemoryCard from '../../../components/App/MuscularMemory/MemoryCard';
 import InfoText from '../../../components/Common/InfoText';
 import AddMemoryModal from '../../../components/App/MuscularMemory/AddMemoryModal';

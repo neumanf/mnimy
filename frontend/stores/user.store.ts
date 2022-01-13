@@ -4,8 +4,6 @@ import Cookies from 'js-cookie';
 import AuthService from '../services/auth.service';
 
 class UserStore {
-    @observable username: string | null = null;
-
     constructor(private readonly authService: AuthService) {}
 
     @action
@@ -22,11 +20,6 @@ class UserStore {
     isLoggedIn() {
         // FIX
         return Cookies.get('SESSION_ID');
-    }
-
-    @action
-    signout() {
-        this.username = null;
     }
 }
 
