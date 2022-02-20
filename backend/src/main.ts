@@ -2,8 +2,13 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import * as RedisStore from 'connect-redis';
 
 import { AppModule } from './app.module';
+import * as Redis from 'redis';
+
+const redisClient = Redis.createClient({ url: 'redis://localhost:6379', legacyMode: true });
+redisClient.connect().catch(console.error);
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -14,6 +19,10 @@ async function bootstrap() {
     app.use(
         session({
             name: 'SESSION_ID',
+            store: new (RedisStore(session))({
+                client: redisClient as any,
+                logErrors: true,
+            }),
             secret: process.env.SESSION_SECRET,
             resave: false,
             saveUninitialized: false,
