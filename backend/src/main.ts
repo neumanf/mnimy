@@ -7,7 +7,11 @@ import * as RedisStore from 'connect-redis';
 import { AppModule } from './app.module';
 import * as Redis from 'redis';
 
-const redisClient = Redis.createClient({ url: 'redis://localhost:6379', legacyMode: true });
+const redisClient = Redis.createClient({
+    url: 'redis://localhost:6379',
+    password: '',
+    legacyMode: true,
+});
 redisClient.connect().catch(console.error);
 
 async function bootstrap() {

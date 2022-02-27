@@ -24,7 +24,8 @@ export class AuthController {
     @Get('/signout')
     signOut(@Req() req: Request) {
         req.logout();
+        req.session.cookie.maxAge = 0;
 
-        return { statusCode: 200, message: 'signed out' };
+        return { statusCode: 200, message: 'Signed out successfully' };
     }
 }
