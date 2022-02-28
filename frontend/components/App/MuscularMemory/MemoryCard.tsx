@@ -1,11 +1,11 @@
-import Icon from "@chakra-ui/icon";
-import { Flex, Text, Box } from "@chakra-ui/layout";
-import { Button, Tooltip, useToast } from "@chakra-ui/react";
-import React from "react";
-import { FaArrowAltCircleRight, FaTrash } from "react-icons/fa";
-import { useRouter } from "next/router";
+import Icon from '@chakra-ui/icon';
+import { Flex, Text, Box } from '@chakra-ui/layout';
+import { Button, Tooltip, useToast } from '@chakra-ui/react';
+import React from 'react';
+import { FaArrowAltCircleRight, FaTrash } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
-import RequestHandler from "../../../handlers/request.handler";
+import BaseHttpService from '../../../services/base-http.service';
 
 interface IMemoryCard {
     getMemories: () => Promise<any>;
@@ -20,24 +20,20 @@ const MemoryCard = ({ getMemories, id, title, content }: IMemoryCard) => {
 
     const deleteMemory = async () => {
         try {
-            const { status, res } = await RequestHandler.make(
-                `/memories/${id}`,
-                "DELETE"
-            );
+            const request = new BaseHttpService();
+            await request.delete(`/memories/${id}`);
 
-            if (status === 200) {
-                toast({
-                    title: "Memory deleted.",
-                    status: "success",
-                    duration: 9000,
-                    isClosable: true,
-                });
-                await getMemories();
-            }
+            toast({
+                title: 'Memory deleted.',
+                status: 'success',
+                duration: 9000,
+                isClosable: true,
+            });
+            await getMemories();
         } catch (e: any) {
             toast({
-                title: "Error, please try again later.",
-                status: "error",
+                title: 'Error, please try again later.',
+                status: 'error',
                 duration: 9000,
                 isClosable: true,
             });
@@ -64,7 +60,7 @@ const MemoryCard = ({ getMemories, id, title, content }: IMemoryCard) => {
                         <Button
                             bgColor="gray.300"
                             textColor="white"
-                            _hover={{ bgColor: "gray.500" }}
+                            _hover={{ bgColor: 'gray.500' }}
                             onClick={redirectToMemory}
                         >
                             <Icon as={FaArrowAltCircleRight} />
@@ -76,7 +72,7 @@ const MemoryCard = ({ getMemories, id, title, content }: IMemoryCard) => {
                             mt="2"
                             bgColor="red.300"
                             textColor="white"
-                            _hover={{ bgColor: "red.400" }}
+                            _hover={{ bgColor: 'red.400' }}
                             onClick={deleteMemory}
                         >
                             <Icon as={FaTrash} />

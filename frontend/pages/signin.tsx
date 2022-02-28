@@ -1,14 +1,14 @@
-import { Box, Button, Input, Text, Link } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { Box, Button, Input, Text, Link } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 
-import userStore from "../stores/user.store";
-import Layout from "../components/Layouts/Home";
-import { redirectIfLoggedIn } from "../utils/authorize";
+import userStore from '../stores/user.store';
+import Layout from '../components/Layouts/Home';
+import { redirectIfLoggedIn } from '../utils/authorize';
 
 const SignIn = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState<string[] | null>(null);
 
     const [isLoading, setLoading] = useState(false);
@@ -24,14 +24,11 @@ const SignIn = () => {
         try {
             setLoading(true);
             await userStore.signin(username, password);
-            await router.push("/app/dashboard");
+            await router.push('/app/dashboard');
         } catch (error: any) {
-            const newErrorMessage: string | string[] =
-                error?.response?.data?.message;
+            const newErrorMessage: string | string[] = error?.response?.data?.message;
             setErrorMessage(
-                typeof newErrorMessage === "string"
-                    ? [newErrorMessage]
-                    : newErrorMessage
+                typeof newErrorMessage === 'string' ? [newErrorMessage] : newErrorMessage
             );
             setLoading(false);
         }
@@ -41,13 +38,7 @@ const SignIn = () => {
         <Layout>
             <div>
                 {errorMessage && (
-                    <Box
-                        py={2}
-                        px={8}
-                        textColor="white"
-                        rounded="lg"
-                        bg="tomato"
-                    >
+                    <Box py={2} px={8} textColor="white" rounded="lg" bg="tomato">
                         {errorMessage.map((msg: string, id: number) => (
                             <li key={id}>{msg}</li>
                         ))}
@@ -65,10 +56,7 @@ const SignIn = () => {
                 </div>
                 <div>
                     <Text py={2}>Password</Text>
-                    <Input
-                        type="password"
-                        onChange={(e: any) => setPassword(e.target.value)}
-                    />
+                    <Input type="password" onChange={(e: any) => setPassword(e.target.value)} />
                 </div>
                 <div>
                     <Button
@@ -85,7 +73,7 @@ const SignIn = () => {
                 <hr />
 
                 <Text textAlign="center" mt={4}>
-                    Do not have an account yet?{" "}
+                    Do not have an account yet?{' '}
                     <Link href="/signup" textColor="purple.500">
                         Sign up
                     </Link>

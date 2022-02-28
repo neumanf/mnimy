@@ -15,8 +15,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
             data: {},
         };
 
-        console.log(exception);
-
         if (exception instanceof HttpException) {
             const res = exception.getResponse();
 

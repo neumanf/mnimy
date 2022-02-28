@@ -22,11 +22,10 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import Layout from '../../../components/Layouts/App';
-import { authorize, signOut } from '../../../utils/authorize';
 import MemoryCard from '../../../components/App/MuscularMemory/MemoryCard';
 import InfoText from '../../../components/Common/InfoText';
 import AddMemoryModal from '../../../components/App/MuscularMemory/AddMemoryModal';
-import RequestHandler from '../../../handlers/request.handler';
+import BaseHttpService from '../../../services/base-http.service';
 
 interface IMemory {
     id: string;
@@ -55,35 +54,29 @@ const MuscularMemory = () => {
 
     const getPaths = (links: any) => {
         for (const index in links) {
-            links[index] = links[index].replace('http://localhost:3001', '');
+            links[index] = links[index].replace(process.env.BACKEND_URL, '');
         }
         return links;
     };
 
     const getMemories = async (paginate?: 'left' | 'right') => {
+        const request = new BaseHttpService();
         const path =
             paginate && pagination
                 ? paginate === 'left'
                     ? pagination.previous
                     : pagination.next
                 : '/memories';
-        const { status, res } = await RequestHandler.make(path);
+        const res: any = await request.get(path);
 
-        if (status === 401) {
-            await signOut();
-        }
+        const paths = getPaths(res.data.links);
 
-        const paths = getPaths(res.links);
-
-        if (status === 200) {
-            setMemories(res.items);
-            setPagination(paths);
-        }
+        setMemories(res.data.items);
+        setPagination(paths);
     };
 
     useEffect(() => {
         (async () => {
-            await authorize();
             await getMemories();
         })();
     }, []);
@@ -102,13 +95,12 @@ const MuscularMemory = () => {
 
     useEffect(() => {
         (async () => {
-            const { status, res } = await RequestHandler.make(`/memories?search=${search}`);
-            const paths = getPaths(res.links);
+            const request = new BaseHttpService();
+            const res: any = await request.get(`/memories?search=${search}`);
+            const paths = getPaths(res.data.links);
 
-            if (status === 200) {
-                setMemories(res.items);
-                setPagination(paths);
-            }
+            setMemories(res.data.items);
+            setPagination(paths);
         })();
     }, [search]);
 

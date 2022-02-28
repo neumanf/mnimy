@@ -14,7 +14,8 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import RequestHandler from "../../../handlers/request.handler";
+
+import BaseHttpService from "../../../services/base-http.service";
 
 interface IAddMemoryModal {
     getMemories: () => Promise<any>;
@@ -30,13 +31,10 @@ const AddMemoryModal = ({ getMemories, isOpen, onClose }: IAddMemoryModal) => {
 
     const createMemory = async () => {
         try {
-            const { status, res } = await RequestHandler.make(
-                "/memories",
-                "POST",
-                { title, content }
-            );
-
-            switch (status) {
+            const request = new BaseHttpService();
+            const res: any = await request.post("/memories", { title, content });
+            
+            switch (res.status) {
                 case 201: {
                     toast({
                         title: "Memory created.",

@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { configValidationSchema } from './config/config.schema';
-import { MemoriesModule } from './memories/memories.module';
+import { MemoriesModule } from './modules/memories/memories.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
     imports: [
@@ -36,6 +37,7 @@ import { MemoriesModule } from './memories/memories.module';
         }),
         AuthModule,
         MemoriesModule,
+        UsersModule,
     ],
     controllers: [],
     providers: [],

@@ -1,18 +1,17 @@
 import { Body, Controller, Delete, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 
-import { Memory } from './memory.entity';
-import { MemoriesService } from './memories.service';
+import { Memory } from '../entities/memory.entity';
+import { MemoriesService } from '../services/memories.service';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { AuthenticatedGuard } from '../../auth/guards/auth.guard';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthenticatedGuard)
 @Controller('memories')
 export class MemoriesController {
     constructor(private readonly memoriesService: MemoriesService) {}
 
     @Post()
-    create(@Body() memory: Memory, @Req() req: Request): Promise<Memory> {
+    create(@Body() memory: Memory, @Req() req: any): Promise<Memory> {
         const user: any = req.user;
         return this.memoriesService.create(user, memory);
     }

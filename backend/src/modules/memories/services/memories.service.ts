@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, ILike } from 'typeorm';
+import { DeleteResult } from 'typeorm';
 import { paginate, Pagination, IPaginationOptions } from 'nestjs-typeorm-paginate';
 
-import { User } from '../users/user.entity';
-import { Memory } from './memory.entity';
-import { MemoriesRepository } from './memories.repository';
+import { User } from '../../users/entities/user.entity';
+import { Memory } from '../entities/memory.entity';
+import { MemoriesRepository } from '../repositories/memories.repository';
 
 @Injectable()
 export class MemoriesService {

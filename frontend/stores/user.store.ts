@@ -1,20 +1,14 @@
-import { observable, action } from "mobx";
+import { observable, action } from 'mobx';
+import Cookies from 'js-cookie';
 
-import AuthService from "../services/auth.service";
+import AuthService from '../services/auth.service';
 
 class UserStore {
-    @observable username: string | null = null;
-
     constructor(private readonly authService: AuthService) {}
 
     @action
-    getAccessToken() {
-        return this.authService.accessToken;
-    }
-
-    @action
     async signin(username: string, password: string) {
-        this.username = await this.authService.signin(username, password);
+        await this.authService.signin(username, password);
     }
 
     @action
@@ -23,9 +17,9 @@ class UserStore {
     }
 
     @action
-    signout() {
-        this.username = null;
-        this.authService.removeToken();
+    isLoggedIn() {
+        // FIX
+        return Cookies.get('SESSION_ID');
     }
 }
 
