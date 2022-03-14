@@ -6,6 +6,7 @@ import { paginate, Pagination, IPaginationOptions } from 'nestjs-typeorm-paginat
 import { User } from '../../users/entities/user.entity';
 import { Memory } from '../entities/memory.entity';
 import { MemoriesRepository } from '../repositories/memories.repository';
+import { CreateMemoryDto } from '../dtos/create-memory.dto';
 
 @Injectable()
 export class MemoriesService {
@@ -14,7 +15,7 @@ export class MemoriesService {
         private readonly memoriesRepository: MemoriesRepository
     ) {}
 
-    async create(_user: User, memory: Memory): Promise<Memory> {
+    async create(_user: User, memory: CreateMemoryDto): Promise<Memory> {
         memory.user = _user;
         const createdMemory = await this.memoriesRepository.save(memory);
         delete createdMemory.user;

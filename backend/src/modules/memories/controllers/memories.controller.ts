@@ -4,6 +4,7 @@ import { Memory } from '../entities/memory.entity';
 import { MemoriesService } from '../services/memories.service';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { AuthenticatedGuard } from '../../auth/guards/auth.guard';
+import { CreateMemoryDto } from '../dtos/create-memory.dto';
 
 @UseGuards(AuthenticatedGuard)
 @Controller('memories')
@@ -11,7 +12,7 @@ export class MemoriesController {
     constructor(private readonly memoriesService: MemoriesService) {}
 
     @Post()
-    create(@Body() memory: Memory, @Req() req: any): Promise<Memory> {
+    create(@Body() memory: CreateMemoryDto, @Req() req: any): Promise<Memory> {
         const user: any = req.user;
         return this.memoriesService.create(user, memory);
     }
