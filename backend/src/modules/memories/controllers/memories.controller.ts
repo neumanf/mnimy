@@ -18,7 +18,7 @@ export class MemoriesController {
     }
 
     @Get()
-    async index(
+    async findAll(
         @Query('page') page = 1,
         @Query('limit') limit = 5,
         @Query('search') search: string

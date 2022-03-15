@@ -90,7 +90,7 @@ describe('MemoriesController', () => {
         });
     });
 
-    describe('index', () => {
+    describe('findAll', () => {
         const paginatedResults: Pagination<Memory> = {
             items: [],
             meta: undefined,
@@ -99,7 +99,7 @@ describe('MemoriesController', () => {
             jest.spyOn(service, 'search');
             jest.spyOn(service, 'paginate').mockImplementation(async () => paginatedResults);
 
-            const result = await controller.index(1, 5, '');
+            const result = await controller.findAll(1, 5, '');
 
             expect(service.search).toHaveBeenCalledTimes(0);
             expect(service.paginate).toHaveBeenCalledTimes(1);
@@ -110,7 +110,7 @@ describe('MemoriesController', () => {
             jest.spyOn(service, 'search').mockImplementation(async () => paginatedResults);
             jest.spyOn(service, 'paginate');
 
-            const result = await controller.index(1, 5, 'any query');
+            const result = await controller.findAll(1, 5, 'any query');
 
             expect(service.search).toHaveBeenCalledTimes(1);
             expect(service.paginate).toHaveBeenCalledTimes(0);
