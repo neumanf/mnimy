@@ -20,8 +20,7 @@ const MemoryCard = ({ getMemories, id, title, content }: IMemoryCard) => {
 
     const deleteMemory = async () => {
         try {
-            const request = new BaseHttpService();
-            await request.delete(`/memories/${id}`);
+            await BaseHttpService.delete(`/memories/${id}`);
 
             toast({
                 title: 'Memory deleted.',

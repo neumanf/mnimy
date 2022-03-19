@@ -1,15 +1,15 @@
 import BaseHttpService from './base-http.service';
 
-export default class AuthService extends BaseHttpService {
+export default class AuthService {
     async signin(username: string, password: string) {
-        await this.post('/auth/signin', {
+        await BaseHttpService.post('/auth/signin', {
             username,
             password,
         });
     }
 
     async signup(username: string, email: string, password: string) {
-        await this.post('/auth/signup', {
+        await BaseHttpService.post('/auth/signup', {
             username,
             email,
             password,

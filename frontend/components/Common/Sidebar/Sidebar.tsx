@@ -77,8 +77,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     const router = useRouter();
 
     const signOut = async () => {
-        const request = new BaseHttpService();
-        await request.get('/auth/signout');
+        await BaseHttpService.get('/auth/signout');
         await router.push('/');
     };
 

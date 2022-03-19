@@ -31,8 +31,7 @@ const AddMemoryModal = ({ getMemories, isOpen, onClose }: IAddMemoryModal) => {
 
     const createMemory = async () => {
         try {
-            const request = new BaseHttpService();
-            const res: any = await request.post("/memories", { title, content });
+            const res: any = await BaseHttpService.post("/memories", { title, content });
             
             switch (res.status) {
                 case 201: {

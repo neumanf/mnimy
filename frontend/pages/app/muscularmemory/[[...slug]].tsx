@@ -60,14 +60,13 @@ const MuscularMemory = () => {
     };
 
     const getMemories = async (paginate?: 'left' | 'right') => {
-        const request = new BaseHttpService();
         const path =
             paginate && pagination
                 ? paginate === 'left'
                     ? pagination.previous
                     : pagination.next
                 : '/memories';
-        const res: any = await request.get(path);
+        const res: any = await BaseHttpService.get(path);
 
         const paths = getPaths(res.data.links);
 
@@ -95,8 +94,7 @@ const MuscularMemory = () => {
 
     useEffect(() => {
         (async () => {
-            const request = new BaseHttpService();
-            const res: any = await request.get(`/memories?search=${search}`);
+            const res: any = await BaseHttpService.get(`/memories?search=${search}`);
             const paths = getPaths(res.data.links);
 
             setMemories(res.data.items);
