@@ -1,10 +1,9 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 
 import { AuthService } from '../services/auth.service';
-import { SignInCredentialsDto } from '../dto/signin-credentials.dto';
 import { SignUpCredentialsDto } from '../dto/signup-credentials.dto';
 import { LoginGuard } from '../guards/login.guard';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -17,8 +16,8 @@ export class AuthController {
 
     @UseGuards(LoginGuard)
     @Post('/signin')
-    async signIn(@Body() signInCredentialsDto: SignInCredentialsDto): Promise<void> {
-        await this.authService.signIn(signInCredentialsDto);
+    async signIn() {
+        return { statusCode: 200, message: 'Signed in successfully' };
     }
 
     @Get('/signout')
